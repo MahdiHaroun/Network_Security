@@ -10,6 +10,7 @@ scikit-learn
 setuptools
 pymongo
 certifi
+pyaml
 
 
 
