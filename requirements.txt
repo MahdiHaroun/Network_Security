@@ -7,3 +7,10 @@ bs4
 python-dotenv
 numpy
 scikit-learn
+setuptools
+pymongo
+certifi
+
+
+
+##-e .
