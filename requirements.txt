@@ -1,0 +1,9 @@
+whois
+requests
+tldextract
+dnspython
+pandas
+bs4
+python-dotenv
+numpy
+scikit-learn
