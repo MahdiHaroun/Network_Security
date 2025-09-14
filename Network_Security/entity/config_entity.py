@@ -23,8 +23,9 @@ This class depends on TrainingPipelineConfig and defines all paths and parameter
 
 class DataIngestionConfig:
     def __init__(self,training_pipeline_config:TrainingPipelineConfig): 
+    
         self.data_ingestion_dir:str=os.path.join(
-            training_pipeline_config.artifact_dir,training_pipeline.DATA_INGESTION_DIR_NAME #Artifacts/09_13_2025_17_30_00/data_ingestion
+            training_pipeline_config.artifact_dir,training_pipeline.DATA_INGESTION_DIR_NAME #Artifacts/09_13_2025_17_30_00/data_ingestion , add data_ingestion_dir inside artifact_dir
         )
         self.feature_store_file_path: str = os.path.join(
                 self.data_ingestion_dir, training_pipeline.DATA_INGESTION_FEATURE_STORE_DIR, training_pipeline.FILE_NAME #Artifacts/09_13_2025_17_30_00/data_ingestion/feature_store/data.csv
