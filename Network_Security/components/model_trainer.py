@@ -41,27 +41,6 @@ class ModelTrainer:
         
     
 
-    def track_mlflow(self,best_model,classificationmetric):
-        mlflow.set_registry_uri("https://dagshub.com/MahdiHaroun/Network_Security_Project.mlflow")
-        tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
-        with mlflow.start_run():
-            f1_score=classificationmetric.f1_score
-            precision_score=classificationmetric.precision_score
-            recall_score=classificationmetric.recall_score
-
-            # Log metrics only (DagHub doesn't support sklearn model logging)
-            mlflow.log_metric("f1_score",f1_score)
-            mlflow.log_metric("precision",precision_score)
-            mlflow.log_metric("recall_score",recall_score)
-            
-            # Log model name and type as parameters instead
-            mlflow.log_param("model_type", type(best_model).__name__)
-            mlflow.log_param("model_class", str(type(best_model)))
-            
-            # Note: DagHub doesn't support mlflow.sklearn.log_model endpoint
-            # Models will be saved locally through the artifact system instead
-            logger.info("Model metrics logged to MLflow. Model artifacts saved locally due to DagHub limitations.")
-
     def track_mlflow_combined(self, best_model, train_metric, test_metric):
         """Track both training and test metrics in a single MLflow run"""
         mlflow.set_registry_uri("https://dagshub.com/MahdiHaroun/Network_Security_Project.mlflow")
@@ -121,7 +100,7 @@ class ModelTrainer:
             }
             
         }
-        model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=x_test,y_test=y_test,
+        model_report, best_params_dict = evaluate_models(X_train=X_train,y_train=y_train,X_test=x_test,y_test=y_test,
                                           models=models,param=params)
         
         ## To get best model score from dict
@@ -133,6 +112,8 @@ class ModelTrainer:
             list(model_report.values()).index(best_model_score)
         ]
         best_model = models[best_model_name]
+        best_model_params = best_params_dict[best_model_name]
+        logger.info(f"Best model found , Model Name: {best_model_name} , R2 Score :{best_model_score} , with best parameters {best_model_params} ")
         y_train_pred=best_model.predict(X_train)
         classification_train_metric=get_classification_score(y_true=y_train,y_pred=y_train_pred)
         

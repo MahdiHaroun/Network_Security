@@ -86,6 +86,7 @@ def load_numpy_array_data(file_path: str) -> np.array:
 def evaluate_models(X_train, y_train,X_test,y_test,models,param):
     try:
         report = {}
+        best_params = {}
 
         for i in range(len(list(models))):
             model = list(models.values())[i]
@@ -97,7 +98,8 @@ def evaluate_models(X_train, y_train,X_test,y_test,models,param):
             model.set_params(**gs.best_params_)
             model.fit(X_train,y_train)
 
-            #model.fit(X_train, y_train)  # Train model
+            # Store the best parameters found by GridSearchCV
+            best_params[list(models.keys())[i]] = gs.best_params_
 
             y_train_pred = model.predict(X_train)
 
@@ -109,7 +111,7 @@ def evaluate_models(X_train, y_train,X_test,y_test,models,param):
 
             report[list(models.keys())[i]] = test_model_score
 
-        return report
+        return report, best_params
 
     except Exception as e:
         raise NetworkSecurityException(e, sys)
