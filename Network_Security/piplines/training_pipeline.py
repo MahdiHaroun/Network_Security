@@ -27,6 +27,8 @@ class TrainingPipeline:
     def __init__(self):
         self.training_pipeline_config=TrainingPipelineConfig()
         self.s3_sync = S3Sync()
+        # Force create a new logger for this training run
+        logger.get_new_logger()
     
         
 
