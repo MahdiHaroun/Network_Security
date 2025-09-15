@@ -2,7 +2,7 @@ FROM python:3.10-slim-buster
 
 WORKDIR /app
 
-# Install system dependencies including AWS CLI
+# Install system dependencies for AWS CLI
 RUN apt-get update && apt-get install -y \
     curl \
     unzip \
