@@ -83,3 +83,4 @@ TRAINING_BUCKET_NAME= "networksecuritymahdiharoun"
 
 
 CSV_UPLOADING_BUCKET_NAME = "networksecuritycsvuploading"
+PREDECTION_SCHEMA_FILE_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "data_schema", "predection_schema.yaml")

@@ -25,10 +25,10 @@ from Network_Security.logging.logger import logger
 from Network_Security.piplines.training_pipeline import TrainingPipeline
 from Network_Security.utils.main_utils.utils import load_object
 from Network_Security.utils.ml_utils.model.estimator import NetworkModel
-import Mongo_push_Trined_Data
-from Upload_CSVs_S3 import SyncCSVS3
+import fastapi_classes.Mongo_push_Trined_Data as Mongo_push_Trined_Data
+from fastapi_classes.Upload_CSVs_S3 import SyncCSVS3
 from Network_Security.constants.training_pipeline import CSV_UPLOADING_BUCKET_NAME
-
+from fastapi_classes import upladed_csv_validation
 
 ca = certifi.where() 
 load_dotenv() 
@@ -155,7 +155,12 @@ async def upload_csv(file: UploadFile = File(...)):
 
         with open(file_path, "wb") as buffer:
             buffer.write(await file.read())  # simpler for small files
-
+        # Validate CSV
+        print("Validating uploaded CSV...")
+        validator = upladed_csv_validation.DataValidation(file_path)
+        validator.initiate_csv_data_validation()   
+        print("CSV validation passed.")
+        
         # Upload to S3
         sync = SyncCSVS3(file_path)
         sync.upload_csv_s3()
@@ -169,6 +174,9 @@ async def upload_csv(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=str(ne))
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Unexpected error: {e}")
+
+
+
 
 
 if __name__ == "__main__":

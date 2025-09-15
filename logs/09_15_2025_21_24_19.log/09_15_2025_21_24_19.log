@@ -1,0 +1,4 @@
+[ 2025-09-15 21:24:19,903 ] 45 training_logger_09_15_2025_21_24_19.log - INFO - Required number of columns: 30
+[ 2025-09-15 21:24:19,903 ] 45 training_logger_09_15_2025_21_24_19.log - INFO - Dataframe has columns: 30
+[ 2025-09-15 21:24:19,903 ] 45 training_logger_09_15_2025_21_24_19.log - INFO - Number of Numerical columns required: 30
+[ 2025-09-15 21:24:19,904 ] 45 training_logger_09_15_2025_21_24_19.log - INFO - Number of Numerical columns present in dataframe: 30
