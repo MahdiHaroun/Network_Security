@@ -22,7 +22,7 @@ jobs:
       run: echo "Running tests"
 
 
-build-and-push-aws-ecr-image:
+  build-and-push-aws-ecr-image:
     name: Continuous Delivery
     needs: integration
     runs-on: ubuntu-latest
@@ -45,7 +45,7 @@ build-and-push-aws-ecr-image:
     - name: Login to AWS ECR 
       id: login-ecr 
       uses: aws-actions/amazon-ecr-login@v1
-      
+
 
      
 
