@@ -1,9 +1,11 @@
+import shutil
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware 
 from fastapi import FastAPI , File , UploadFile , Request 
 from fastapi.responses import Response 
 from starlette.responses import RedirectResponse 
 from fastapi.responses import FileResponse, JSONResponse
+from fastapi import HTTPException
 import uvicorn
 
 
@@ -24,6 +26,8 @@ from Network_Security.piplines.training_pipeline import TrainingPipeline
 from Network_Security.utils.main_utils.utils import load_object
 from Network_Security.utils.ml_utils.model.estimator import NetworkModel
 import Mongo_push_Trined_Data
+from Upload_CSVs_S3 import SyncCSVS3
+from Network_Security.constants.training_pipeline import CSV_UPLOADING_BUCKET_NAME
 
 
 ca = certifi.where() 
@@ -106,6 +110,7 @@ async def predict_route(request: Request, file: UploadFile = File(...), response
     except Exception as e:
         raise NetworkSecurityException(e, sys)
 
+
     
 @app.post("/json_file_upload/")
 async def upload_json_file(file: UploadFile = File(...)):
@@ -132,11 +137,38 @@ async def upload_json_file(file: UploadFile = File(...)):
         return JSONResponse(content={
             "message": f"Successfully inserted {records_inserted} records into collection '{collection_name}'."
         })
-
     except Exception as e:
         raise NetworkSecurityException(e, sys)
-    
 
+
+@app.post("/upload-csv/")
+async def upload_csv(file: UploadFile = File(...)):
+    try:
+        # Make sure it's a CSV
+        if not file.filename.endswith(".csv"):
+            raise HTTPException(status_code=400, detail="Only CSV files are allowed.")
+        
+        # Save file temporarily
+        temp_dir = "temp_uploads"
+        os.makedirs(temp_dir, exist_ok=True)
+        file_path = os.path.join(temp_dir, file.filename)
+
+        with open(file_path, "wb") as buffer:
+            buffer.write(await file.read())  # simpler for small files
+
+        # Upload to S3
+        sync = SyncCSVS3(file_path)
+        sync.upload_csv_s3()
+
+        # Cleanup
+        os.remove(file_path)
+
+        return {"message": f"File {file.filename} uploaded successfully to {CSV_UPLOADING_BUCKET_NAME}"}
+    
+    except NetworkSecurityException as ne:
+        raise HTTPException(status_code=500, detail=str(ne))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {e}")
 
 
 if __name__ == "__main__":

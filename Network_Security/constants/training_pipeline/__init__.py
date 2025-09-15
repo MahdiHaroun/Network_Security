@@ -80,3 +80,6 @@ MODEL_TRAINER_OVER_FIITING_UNDER_FITTING_THRESHOLD: float = 0.05
 
 TRAINING_BUCKET_NAME= "networksecuritymahdiharoun"
 
+
+
+CSV_UPLOADING_BUCKET_NAME = "networksecuritycsvuploading"

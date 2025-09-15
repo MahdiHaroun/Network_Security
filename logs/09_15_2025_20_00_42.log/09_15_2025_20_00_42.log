@@ -1,0 +1,2 @@
+[ 2025-09-15 20:00:42,708 ] 50 training_logger_09_15_2025_20_00_42.log - ERROR - Error in predict_route: Error tokenizing data. C error: Expected 1 fields in line 3, saw 2
+
