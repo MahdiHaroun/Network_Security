@@ -63,19 +63,7 @@ The project includes an N8N workflow (`N8N Agent/PredectionAgent.json`) that aut
 - Real-time monitoring
 - Comprehensive experiment tracking with DAGs
 
-The project is containerized and ready for AWS ECR:
-
-```bash
-# 1. Login to ECR
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <your-account-id>.dkr.ecr.us-east-1.amazonaws.com
-
-# 2. Tag the image
-docker tag network-security-app:latest <your-account-id>.dkr.ecr.us-east-1.amazonaws.com/network-security-app:latest
-
-# 3. Push to ECR
-docker push <your-account-id>.dkr.ecr.us-east-1.amazonaws.com/network-security-app:latest
-```
-
+The project is containerized in AWS ECR and Ready for Deployment in AWS EC2
 ## Project Structure
 
 ```
